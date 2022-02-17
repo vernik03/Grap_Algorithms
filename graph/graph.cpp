@@ -38,6 +38,10 @@ void DepthFirstSearch(const int& count_elems, const vector<vector<int>>& graph) 
 		cout << node + 1 << " "; // выводим номер вершины
 	}
 	cout << endl;
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "DepthFirstSearch" << endl;
+	out.close();
 }
 
 
@@ -65,6 +69,10 @@ void BreadthFirstSearch(const int& count_elems, const vector<vector<int>>& graph
 		cout << node + 1 << " "; // выводим номер вершины
 	}
 	cout << endl;
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "BreadthFirstSearch" << endl;
+	out.close();
 }
 
 void PrimsAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
@@ -118,6 +126,10 @@ void PrimsAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
 		cout << pair.first + 1 << "-" << pair.second + 1 << " ";
 	}	
 	cout << endl;
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "PrimsAlgorithm" << endl;
+	out.close();
 }
 
 void DijkstraAlgorithm(const int& count_elems, const vector<vector<int>>& graph)
@@ -161,6 +173,10 @@ void DijkstraAlgorithm(const int& count_elems, const vector<vector<int>>& graph)
 			cout << x - 1 << " > " << i + 1 << " = " << "no path" << endl; 
 		}
 	}
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "DijkstraAlgorithm" << endl;
+	out.close();
 }
 
 int main()
