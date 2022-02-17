@@ -31,3 +31,5 @@ G.add_weighted_edges_from(edags)
 colors = np.arange(matrix.shape[0])
 nx.draw(G,pos=nx.spring_layout(G),node_color="black")
 plt.show()
+
+f = open('text.txt', 'r')
