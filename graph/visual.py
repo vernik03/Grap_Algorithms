@@ -35,7 +35,7 @@ def PrintMatrix():
     nx.draw(G,pos=nx.spring_layout(G),node_color="black")
     plt.show()
 
-def ReadFile(name):
+def ReadFile(name): #!!! takes 1 positional argument but 11 were given (почему?)
     name = "command.txt"
     while True:
         f = open(name, 'r')        
