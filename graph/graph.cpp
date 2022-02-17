@@ -9,6 +9,7 @@
 #include <string>
 #include <stack>
 #include <queue>
+#include <thread>
 
 using namespace std;
 
@@ -187,13 +188,26 @@ int main()
 		graph.push_back(temp);
 		temp.clear();
 	}
-	
-	DepthFirstSearch(count_elems, graph);
-	BreadthFirstSearch(count_elems, graph);
-	PrimsAlgorithm(count_elems, graph);
-	DijkstraAlgorithm(count_elems, graph);
-}
 
+	thread t1([&]()
+		{
+			DepthFirstSearch(count_elems, graph);
+			BreadthFirstSearch(count_elems, graph);
+			PrimsAlgorithm(count_elems, graph);
+			DijkstraAlgorithm(count_elems, graph);
+		});
+
+	thread t2([&]()
+		{
+			system("python visual.py");			
+		});
+
+	t1.join();
+	t2.join();
+
+	
+	
+}
 
 //    1 - 2
 //    | / |
