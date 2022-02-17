@@ -1,0 +1,8 @@
+Package: matplotlib-cpp
+Version: 2020-08-27
+Port-Version: 1
+Architecture: x86-windows
+Multi-Arch: same
+Abi: f228eba716fd1537863bc5e77ac5cfbe816fff65c5748c407dafd2ae56724f74
+Description: Extremely simple yet powerful header-only C++ plotting library built on the popular matplotlib
+Type: Port
