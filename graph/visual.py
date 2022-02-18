@@ -35,12 +35,16 @@ def PrintMatrix():
     def animate(i):
         plt.clf()
         plt.cla()
-        if x%3 == 0:
-            nx.draw(G,pos=pos,node_color="black")
-        elif x%3 == 1:
+        if x == 1:
+            nx.draw(G,pos=pos,node_color="red")
+        elif x == 2:
             nx.draw(G,pos=pos,node_color="green")
-        elif x%3 == 2:
-            nx.draw(G,pos=pos,node_color="blue")    
+        elif x == 3:
+            nx.draw(G,pos=pos,node_color="blue")
+        elif x == 4:
+            nx.draw(G,pos=pos,node_color="yellow")  
+        else:
+            nx.draw(G,pos=pos,node_color="black")  
 
     ani = animation.FuncAnimation(fig, animate, interval=1000)
     plt.show()
@@ -49,27 +53,31 @@ def PrintMatrix():
 def ReadFile(name):     
     global x
     while True:
-        f = open(name, 'r')  
-            
+        f = open(name, 'r')
         str = f.readline()
         if str == "new\n":
+            print('!')
             f.close()
+            PaintGraph(name)
         f.close()
-        x+=1
         time.sleep(1)
 
 
 def PaintGraph(name): 
+    global x
     f = open(name, 'r')    
-    if f.readline() == "new":
-        if  f.readline() == "DepthFirstSearch\n":       
-            nx.draw(G,pos=nx.spring_layout(G),node_color="red")
-        elif f.readline() == "BreadthFirstSearch\n":   
-            nx.draw(G,pos=nx.spring_layout(G),node_color="green")
-        elif f.readline() == "PrimsAlgorithm\n":   
-            nx.draw(G,pos=nx.spring_layout(G),node_color="blue")
-        elif f.readline() == "DijkstraAlgorithm\n":   
-            nx.draw(G,pos=nx.spring_layout(G),node_color="yellow") 
+    str = f.readline()
+    if str == "new\n":       
+        str = f.readline()
+        print(str)
+        if  str == "DepthFirstSearch\n":       
+            x = 1
+        elif str == "BreadthFirstSearch\n":   
+            x = 2
+        elif str == "PrimsAlgorithm\n":   
+            x = 3
+        elif str == "DijkstraAlgorithm\n":   
+            x = 4
         f.close()
         fw = open(name, 'w')
         fw.write('painted')
@@ -96,11 +104,8 @@ x = 0
 s = "command.txt"
 th_matrix = Thread(target=PrintMatrix, daemon=True)
 th_read = Thread(target=ReadFile, args=(s,))
-th_paint = Thread(target=PaintGraph, args=(s,),daemon=True)
 th_matrix.start()
 th_read.start()
-th_paint.start()
-
 
 
 
