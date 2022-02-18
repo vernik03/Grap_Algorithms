@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
 from threading import Thread
+import matplotlib.animation as animation
+
+
 
 def get_matrix_triad(coo_matrix , data=False):
 	'''
@@ -24,26 +27,39 @@ def get_matrix_triad(coo_matrix , data=False):
 	return temp.tolist()
 
 def PrintMatrix():   
-    nx.draw(G,pos=nx.spring_layout(G),node_color="black")
-    print('!')
+    fig = plt.figure()
+    net = fig.add_subplot(111)
+    global x
+    pos=nx.spring_layout(G)
+    #pos=nx.graphviz_layout(G)
+    def animate(i):
+        plt.clf()
+        plt.cla()
+        if x%3 == 0:
+            nx.draw(G,pos=pos,node_color="black")
+        elif x%3 == 1:
+            nx.draw(G,pos=pos,node_color="green")
+        elif x%3 == 2:
+            nx.draw(G,pos=pos,node_color="blue")    
+
+    ani = animation.FuncAnimation(fig, animate, interval=1000)
     plt.show()
     
 
-def ReadFile(name): #!!! takes 1 positional argument but 11 were given (почему?)
-    name = "command.txt"
+def ReadFile(name):     
+    global x
     while True:
         f = open(name, 'r')  
-        print('!')      
+            
         str = f.readline()
         if str == "new\n":
             f.close()
-            print('!!!') 
-            th_paint.start()
         f.close()
-        time.sleep(5)
+        x+=1
+        time.sleep(1)
 
 
-def PaintGraph(name):    
+def PaintGraph(name): 
     f = open(name, 'r')    
     if f.readline() == "new":
         if  f.readline() == "DepthFirstSearch\n":       
@@ -53,11 +69,13 @@ def PaintGraph(name):
         elif f.readline() == "PrimsAlgorithm\n":   
             nx.draw(G,pos=nx.spring_layout(G),node_color="blue")
         elif f.readline() == "DijkstraAlgorithm\n":   
-            nx.draw(G,pos=nx.spring_layout(G),node_color="yellow")        
-        plt.show()
+            nx.draw(G,pos=nx.spring_layout(G),node_color="yellow") 
         f.close()
         fw = open(name, 'w')
         fw.write('painted')
+
+
+
 
 matrix = np.genfromtxt("matrix.txt", delimiter=' ')
 edags = get_matrix_triad(matrix)
@@ -67,13 +85,25 @@ G.add_nodes_from(H)
 G.add_weighted_edges_from(edags)
 colors = np.arange(matrix.shape[0])
 
-print('~')
-s = "c"
+#nx.draw(G,pos=nx.spring_layout(G),node_color="black")
+#plt.ion()
+#fig = plt.figure()
+#fig.canvas.draw()
+#plt.show()
+
+
+x = 0
+s = "command.txt"
 th_matrix = Thread(target=PrintMatrix, daemon=True)
-th_read = Thread(target=ReadFile, args=(s))
-th_paint = Thread(target=PaintGraph, args=(s),daemon=True)
-print('~~')
+th_read = Thread(target=ReadFile, args=(s,))
+th_paint = Thread(target=PaintGraph, args=(s,),daemon=True)
 th_matrix.start()
 th_read.start()
+th_paint.start()
+
+
+
+
+
 
 
