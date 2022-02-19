@@ -200,20 +200,31 @@ void AStar(const int& count_elems, const vector<vector<int>>& graph) {
 	int start, goal;
 	cout << "A-star algorithm, enter first node number: ";
 	cin >> start;
+	start--;
 	cout << "Enter last node number: ";
 	cin >> goal;
+	goal--;
 
 	unordered_set<int> open_set;
 	open_set.insert(start);
 	unordered_map<int, int> came_from;
-	map<int, int> g_score(count_elems, INT_MAX);
+	map<int, int> g_score;
+	for (int i = 0; i < count_elems; i++)
+	{
+		g_score[i] = INT_MAX;
+	}
 	g_score[start] = 0;
-	map<int, double> f_score(count_elems, INT_MAX);
+	map<int, double> f_score;
+	for (int i = 0; i < count_elems; i++)
+	{
+		f_score[i] = INT_MAX;
+	}
 	f_score[start] = h(start, graph, came_from);
-	came_from[start] = start;
+	//came_from[start] = start;
 
+	int current = 0;
 	while (!open_set.empty()) {
-		int current = *(--(open_set.end()));
+		current = *(--(open_set.end()));
 		for (auto elem : open_set)
 		{
 			if (f_score.at(elem) < f_score.at(current) && elem != start)
@@ -224,28 +235,33 @@ void AStar(const int& count_elems, const vector<vector<int>>& graph) {
 		if (current == goal) {
 			break;
 		}
-		open_set.extract(--(open_set.end()));
-		for (int i = 0; i < count_elems; i++) {	
+		open_set.extract(current);
+		for (int i = 0; i < count_elems; i++) {
 			if (graph[current][i])
 			{
-				double tentative_g_score = g_score[current] + graph[current][i];
+				int tentative_g_score = g_score[current] + graph[current][i];
 				if (tentative_g_score < g_score[i]) {
 					came_from[i] = current;
 					g_score[i] = tentative_g_score;
-					f_score[i] = tentative_g_score + h(i, graph, came_from);					
+					f_score[i] = tentative_g_score + h(i, graph, came_from);
 					if (!open_set.count(i))
 					{
 						open_set.insert(i);
 					}
 				}
-			}			
+			}
 		}
 	}
-	cout << start << " ";
-	for (auto node : came_from)
-	{
-		cout << node.second << " ";
+	//cout << start << " ";
+	std::vector<int> total_path = { current };
+	while (current != start) {
+		current = came_from[current];
+		total_path.push_back(current);
 	}
+	for (auto elem : total_path) {
+		std::cout << elem + 1 << " ";
+	}
+	std::cout << std::endl;
 	cout << endl;
 }
 
