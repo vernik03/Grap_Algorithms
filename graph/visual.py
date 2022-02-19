@@ -86,19 +86,12 @@ def PaintGraph(name):
 
 
 matrix = np.genfromtxt("matrix.txt", delimiter=' ')
-edags = get_matrix_triad(matrix)
+edges = get_matrix_triad(matrix)
 G = nx.Graph()
 H = nx.path_graph(matrix.shape[0]) 
 G.add_nodes_from(H)
-G.add_weighted_edges_from(edags)
+G.add_weighted_edges_from(edges)
 colors = np.arange(matrix.shape[0])
-
-#nx.draw(G,pos=nx.spring_layout(G),node_color="black")
-#plt.ion()
-#fig = plt.figure()
-#fig.canvas.draw()
-#plt.show()
-
 
 x = 0
 s = "command.txt"

@@ -10,6 +10,9 @@
 #include <stack>
 #include <queue>
 #include <thread>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -17,6 +20,10 @@ void DepthFirstSearch(const int& count_elems, const vector<vector<int>>& graph) 
 	int x;
 	cout << "Depth-first search, enter node number: ";
 	cin >> x;
+
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "DepthFirstSearch" << endl;
 
 	vector<int> nodes(count_elems, 0); // вершины графа
 	stack<int> my_stack;
@@ -36,11 +43,9 @@ void DepthFirstSearch(const int& count_elems, const vector<vector<int>>& graph) 
 			}
 		}
 		cout << node + 1 << " "; // выводим номер вершины
+		out << node + 1 << " ";
 	}
 	cout << endl;
-	ofstream out("command.txt");
-	out << "new" << endl;
-	out << "DepthFirstSearch" << endl;
 	out.close();
 }
 
@@ -49,6 +54,10 @@ void BreadthFirstSearch(const int& count_elems, const vector<vector<int>>& graph
 	int x;
 	cout << "Breadth-first search, enter node number: ";
 	cin >> x;
+
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "BreadthFirstSearch" << endl;
 
 	vector<int> nodes(count_elems, 0); // вершины графа
 	queue<int> my_queue;
@@ -67,11 +76,9 @@ void BreadthFirstSearch(const int& count_elems, const vector<vector<int>>& graph
 			}
 		}
 		cout << node + 1 << " "; // выводим номер вершины
+		out << node + 1 << " ";
 	}
-	cout << endl;
-	ofstream out("command.txt");
-	out << "new" << endl;
-	out << "BreadthFirstSearch" << endl;
+	cout << endl;	
 	out.close();
 }
 
@@ -179,6 +186,70 @@ void DijkstraAlgorithm(const int& count_elems, const vector<vector<int>>& graph)
 	out.close();
 }
 
+int h(int current, const vector<vector<int>>& graph, unordered_map<int, int> came_from) {
+	int h=0;
+	for (auto node : came_from)
+	{
+		h += graph[node.first][node.second];
+	}
+	return h;
+}
+
+void AStar(const int& count_elems, const vector<vector<int>>& graph) {
+
+	int start, goal;
+	cout << "A-star algorithm, enter first node number: ";
+	cin >> start;
+	cout << "Enter last node number: ";
+	cin >> goal;
+
+	unordered_set<int> open_set;
+	open_set.insert(start);
+	unordered_map<int, int> came_from;
+	map<int, int> g_score(count_elems, INT_MAX);
+	g_score[start] = 0;
+	map<int, double> f_score(count_elems, INT_MAX);
+	f_score[start] = h(start, graph, came_from);
+	came_from[start] = start;
+
+	while (!open_set.empty()) {
+		int current = *(--(open_set.end()));
+		for (auto elem : open_set)
+		{
+			if (f_score.at(elem) < f_score.at(current) && elem != start)
+			{
+				current = elem;
+			}
+		}
+		if (current == goal) {
+			break;
+		}
+		open_set.extract(--(open_set.end()));
+		for (int i = 0; i < count_elems; i++) {	
+			if (graph[current][i])
+			{
+				double tentative_g_score = g_score[current] + graph[current][i];
+				if (tentative_g_score < g_score[i]) {
+					came_from[i] = current;
+					g_score[i] = tentative_g_score;
+					f_score[i] = tentative_g_score + h(i, graph, came_from);					
+					if (!open_set.count(i))
+					{
+						open_set.insert(i);
+					}
+				}
+			}			
+		}
+	}
+	cout << start << " ";
+	for (auto node : came_from)
+	{
+		cout << node.second << " ";
+	}
+	cout << endl;
+}
+
+
 int main()
 {
     vector<vector<int>> graph;
@@ -211,6 +282,7 @@ int main()
 			BreadthFirstSearch(count_elems, graph);
 			PrimsAlgorithm(count_elems, graph);
 			DijkstraAlgorithm(count_elems, graph);
+			AStar(count_elems, graph);
 		});
 
 	thread t2([&]()
