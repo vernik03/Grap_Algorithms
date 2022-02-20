@@ -375,23 +375,286 @@ void FordFulkersonAlgorithm(const int& count_elems, const vector<vector<int>>& g
 			graph_temp[v][u] += path_flow;
 			v = parent[v];
 		}
-		/*
-		int delta = 10000;
-		for (int u = 0; u < visited.size(); u++) // Найти минимальный поток в сети
-		{
-			delta = min(delta, (graph[visited[u]][u] - flow[visited[u]][u]));
-		}
-		pathCount++;
-		for (int u = 0; u < visited.size(); u++) // По алгоритму Форда-Фалкерсона 
-		{
-			u--;
-			flow[visited[u]][u] += delta;
-			flow[u][visited[u]] -= delta;
-		}
-		max_flow += delta;
-		*/
 	}
 	cout << max_flow << endl;
+}
+
+void DijkstraBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
+	int start;
+	cout << "Bidirectional Dijkstra's algorithm, enter first node number: ";
+	cin >> start;
+	int goal;
+	cout << "Bidirectional Dijkstra's algorithm, enter second node number: ";
+	cin >> goal;
+
+	vector<int> distance_start(count_elems, INT_MAX);
+	int count_start, v_start;
+	vector<bool> visited_start(count_elems, 0);
+	distance_start[start - 1] = start - 1;
+	vector<int> parents_start(count_elems, 0);
+	parents_start[start - 1] = start - 1;
+
+	vector<int> distance_goal(count_elems, INT_MAX);
+	int count_goal, v_goal;
+	vector<bool> visited_goal(count_elems, 0);
+	distance_goal[goal - 1] = goal - 1;
+	vector<int> parents_goal(count_elems, 0);
+	parents_goal[goal - 1] = goal - 1;
+
+	for (int j = 0; j < count_elems - 1; j++)
+	{
+		int min = INT_MAX;
+		for (int i = 0; i < count_elems; i++)
+		{
+			if (!visited_start[i] && distance_start[i] <= min)
+			{
+				min = distance_start[i];
+				v_start = i;
+			}
+		}
+		visited_start[v_start] = true;
+		for (int i = 0; i < count_elems; i++)
+		{
+			if (!visited_start[i] && graph[v_start][i] && distance_start[v_start] + graph[v_start][i] < distance_start[i])
+			{
+				parents_start[i] = v_start;
+				distance_start[i] = distance_start[v_start] + graph[v_start][i];
+			}
+		}
+
+		min = INT_MAX;
+		//v_goal = goal;
+		for (int i = 0; i < count_elems; i++)
+		{
+			if (!visited_goal[i] && distance_goal[i] <= min)
+			{
+				min = distance_goal[i];
+				v_goal = i;
+			}
+		}
+		visited_goal[v_goal] = true;
+		for (int i = 0; i < count_elems; i++)
+		{
+			if (!visited_goal[i] && graph[v_goal][i] && distance_goal[v_goal] + graph[v_goal][i] < distance_goal[i])
+			{
+				parents_goal[i] = v_goal;
+				distance_goal[i] = distance_goal[v_goal] + graph[v_goal][i];
+			}
+		}
+
+		//std::cout << v_start << " " << v_goal << std::endl;
+		bool leave = false;
+		for (int i = 0; i < visited_start.size() - 1; i++) {
+			if (visited_start[i] && visited_goal[i]) {
+				std::cout << "Connecting node: " << i + 1 << "\n";
+				leave = true;
+
+				int curr = i;
+				std::cout << curr + 1 << " ";
+				while (curr != parents_start[curr]) {
+					curr = parents_start[curr];
+					std::cout << curr + 1 << " ";
+				}
+				std::cout << "\n";
+
+				curr = i;
+				std::cout << curr + 1 << " ";
+				while (curr != parents_goal[curr]) {
+					curr = parents_goal[curr];
+					std::cout << curr + 1 << " ";
+				}
+				std::cout << "\n";
+				break;
+			}
+		}
+		if (leave) {
+			break;
+		}
+	}
+}
+
+void AStarBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
+
+	int start, goal;
+	cout << "Bidirectional A-star algorithm, enter first node number: ";
+	cin >> start;
+	start--;
+	cout << "Enter last node number: ";
+	cin >> goal;
+	goal--;
+
+	unordered_set<int> open_set_start;
+	unordered_set<int> open_set_goal;
+	open_set_start.insert(start);
+	open_set_goal.insert(goal);
+	unordered_map<int, int> came_from_start;
+	unordered_map<int, int> came_from_goal;
+	map<int, int> g_score_start;
+	map<int, int> g_score_goal;
+
+	for (int i = 0; i < count_elems; i++)
+	{
+		g_score_start[i] = INT_MAX;
+	}
+	for (int i = count_elems - 1; i >= 0; i--)
+	{
+		g_score_goal[i] = INT_MAX;
+	}
+	g_score_start[start] = 0;
+	g_score_goal[goal] = 0;
+	map<int, double> f_score_start;
+	map<int, double> f_score_goal;
+	for (int i = 0; i < count_elems; i++)
+	{
+		f_score_start[i] = INT_MAX;
+	}
+	for (int i = count_elems - 1; i >= 0; i--)
+	{
+		f_score_goal[i] = INT_MAX;
+	}
+	f_score_start[start] = h(start, graph, came_from_start);
+	f_score_goal[goal] = h(goal, graph, came_from_goal);
+
+	int current_start = 0;
+	int current_goal = 0;
+	std::vector<bool> visited_start(count_elems, false);
+	std::vector<bool> visited_goal(count_elems, false);
+	visited_start[start] = true;
+	visited_goal[goal] = true;
+	while (!open_set_start.empty() || !open_set_goal.empty()) {
+		current_start = *(--(open_set_start.end()));
+		current_goal = *(--(open_set_goal.end()));
+
+		if (current_start == current_goal) {
+			break;
+		}
+		bool leave = false;
+
+		for (auto elem : open_set_start)
+		{
+			if (f_score_start.at(elem) < f_score_start.at(current_start) && elem != start)
+			{
+				current_start = elem;
+				visited_start[elem] = true;
+
+				if (visited_goal[elem]) {
+					std::cout << "!start" << elem + 1 << "\n";
+					current_start = elem;
+					current_goal = elem;
+					leave = true;
+					break;
+				}
+			}
+		}
+		if (leave)break;
+		for (auto elem : open_set_goal)
+		{
+			if (f_score_goal.at(elem) < f_score_goal.at(current_goal) && elem != goal)
+			{
+				current_goal = elem;
+				visited_goal[elem] = true;
+
+				if (visited_start[elem]) {
+					std::cout << "!goal" << elem + 1 << "\n";
+					leave = true;
+					current_start = elem;
+					current_goal = elem;
+					break;
+				}
+			}
+		}
+		if (leave)break;
+
+		leave = false;
+		for (int i = 0; i < count_elems; i++) {
+			if (visited_start[i] && visited_goal[i]) {
+				leave = true;
+				break;
+			}
+		}
+		if (leave) {
+
+			break;
+		}
+
+		if (current_start == current_goal) {
+			break;
+		}
+		open_set_start.extract(current_start);
+		open_set_goal.extract(current_goal);
+
+		for (int i = 0; i < count_elems; i++) {
+			if (graph[current_start][i])
+			{
+				int tentative_g_score = g_score_start[current_start] + graph[current_start][i];
+				if (tentative_g_score < g_score_start[i]) {
+					came_from_start[i] = current_start;
+					g_score_start[i] = tentative_g_score;
+					f_score_start[i] = tentative_g_score + h(i, graph, came_from_start);
+					if (!open_set_start.count(i))
+					{
+						open_set_start.insert(i);
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < count_elems; i++) {
+			if (graph[current_goal][i])
+			{
+				int tentative_g_score = g_score_goal[current_goal] + graph[current_goal][i];
+				if (tentative_g_score < g_score_goal[i]) {
+					came_from_goal[i] = current_goal;
+					g_score_goal[i] = tentative_g_score;
+					f_score_goal[i] = tentative_g_score + h(i, graph, came_from_goal);
+					if (!open_set_goal.count(i))
+					{
+						open_set_goal.insert(i);
+					}
+				}
+			}
+		}
+	}
+
+		//std::vector<int> total_path_start = {};
+		std::vector<int> total_path_start = { current_start };
+	while (current_start != start) {
+		current_start = came_from_start[current_start];
+		total_path_start.push_back(current_start);
+	}
+	reverse(total_path_start.begin(), total_path_start.end());
+
+	//std::vector<int> total_path_goal = {  };
+	if (current_goal != goal) {
+		current_goal = came_from_goal[current_goal];
+	}
+
+	//std::vector<int> total_path_goal = { };
+	std::vector<int> total_path_goal = { current_goal };
+	while (current_goal != goal) {
+		current_goal = came_from_goal[current_goal];
+		total_path_goal.push_back(current_goal);
+	}
+	if (came_from_start.size() == came_from_goal.size())
+	{
+		//total_path_start.pop_back();
+		reverse(total_path_goal.begin(), total_path_goal.end());
+		//total_path_goal.pop_back();
+		//total_path_goal.pop_back();
+		reverse(total_path_goal.begin(), total_path_goal.end());
+	}
+
+	for (int i = 0; i < total_path_goal.size(); i++)
+	{
+		total_path_start.push_back(total_path_goal[i]);
+	}
+
+
+	for (auto elem : total_path_start) {
+		std::cout << elem + 1 << " ";
+	}
+	std::cout << std::endl;
+	cout << endl;
 }
 
 int main()
@@ -422,13 +685,14 @@ int main()
 
 	thread t1([&]()
 		{
-			DepthFirstSearch(count_elems, graph);
-			BreadthFirstSearch(count_elems, graph);
-			PrimsAlgorithm(count_elems, graph);
-			DijkstraAlgorithm(count_elems, graph);
+			//DepthFirstSearch(count_elems, graph);
+			//BreadthFirstSearch(count_elems, graph);
+			//PrimsAlgorithm(count_elems, graph);
+			//DijkstraAlgorithm(count_elems, graph);
 			AStarAlgorithm(count_elems, graph);
-			FordFulkersonAlgorithm(count_elems, graph);
-			//
+			//FordFulkersonAlgorithm(count_elems, graph);
+			//DijkstraBidirectionalAlgorithm(count_elems, graph);
+			AStarBidirectionalAlgorithm(count_elems, graph);
 		});
 
 	thread t2([&]()
