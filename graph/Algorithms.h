@@ -17,18 +17,21 @@ using namespace std;
 class Algorithms
 {
 public:
-	Algorithms() {};
+	Algorithms(const string& filename = "matrix.txt");
 	~Algorithms() {};
-	void DepthFirstSearch(const int& count_elems, const vector<vector<int>>& graph);
-	void BreadthFirstSearch(const int& count_elems, const vector<vector<int>>& graph);
-	void PrimsAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
-	void DijkstraAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
-	void AStarAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
-	void FordFulkersonAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
-	void DijkstraBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
-	void AStarBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph);
+	void DepthFirstSearch();
+	void BreadthFirstSearch();
+	void PrimsAlgorithm();
+	void DijkstraAlgorithm();
+	void AStarAlgorithm();
+	void FordFulkersonAlgorithm();
+	void DijkstraBidirectionalAlgorithm();
+	void AStarBidirectionalAlgorithm();
 
 private:
-	int h(int current, const vector<vector<int>>& graph, unordered_map<int, int> came_from);
-	vector<int> AStarAlgorithmVector(const int& count_elems, const vector<vector<int>>& graph, int start, int goal);
+	int start, goal;
+	int count_elems;
+	vector<vector<int>> graph;
+	int h(int current, unordered_map<int, int> came_from);
+	vector<int> AStarAlgorithmVector();
 };

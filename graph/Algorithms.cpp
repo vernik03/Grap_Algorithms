@@ -3,10 +3,34 @@
 
 using namespace std;
 
-void Algorithms::DepthFirstSearch(const int& count_elems, const vector<vector<int>>& graph) {
-	int x;
+Algorithms::Algorithms(const string& filename) {
+	count_elems = 0;
+	int elem;
+	ifstream in(filename);
+	while (!in.eof())
+	{
+		in >> elem;
+		count_elems++;
+	}
+	in.close();
+	count_elems = sqrt(count_elems);
+	ifstream file(filename);
+	for (int i = 0; i < count_elems; i++)
+	{
+		vector<int> temp;
+		for (int j = 0; j < count_elems; j++)
+		{
+			file >> elem;
+			temp.push_back(elem);
+		}
+		graph.push_back(temp);
+		temp.clear();
+	}
+};
+
+void Algorithms::DepthFirstSearch() {
 	cout << "Depth-first search, enter node number: ";
-	cin >> x;
+	cin >> start;
 
 	ofstream out("command.txt");
 	out << "new" << endl;
@@ -14,7 +38,7 @@ void Algorithms::DepthFirstSearch(const int& count_elems, const vector<vector<in
 
 	vector<int> nodes(count_elems, 0);
 	stack<int> my_stack;
-	my_stack.push(x - 1);
+	my_stack.push(start - 1);
 	while (!my_stack.empty())
 	{
 		int node = my_stack.top();
@@ -36,10 +60,9 @@ void Algorithms::DepthFirstSearch(const int& count_elems, const vector<vector<in
 	out.close();
 }
 
-void Algorithms::BreadthFirstSearch(const int& count_elems, const vector<vector<int>>& graph) {
-	int x;
+void Algorithms::BreadthFirstSearch() {
 	cout << "Breadth-first search, enter node number: ";
-	cin >> x;
+	cin >> start;
 
 	ofstream out("command.txt");
 	out << "new" << endl;
@@ -47,7 +70,7 @@ void Algorithms::BreadthFirstSearch(const int& count_elems, const vector<vector<
 
 	vector<int> nodes(count_elems, 0);
 	queue<int> my_queue;
-	my_queue.push(x - 1);
+	my_queue.push(start - 1);
 	while (!my_queue.empty())
 	{
 		int node = my_queue.front();
@@ -68,15 +91,14 @@ void Algorithms::BreadthFirstSearch(const int& count_elems, const vector<vector<
 	out.close();
 }
 
-void Algorithms::PrimsAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
-	int x;
+void Algorithms::PrimsAlgorithm() {
 	cout << "Prim's algorithm, enter node number: ";
-	cin >> x;
+	cin >> start;
 
 	vector<int> weights(count_elems, INT_MAX);
 	vector<int> ancestor(count_elems, NULL);
 	vector<pair<int, int>> edges;
-	weights[x - 1] = 0;
+	weights[start - 1] = 0;
 	queue<int> my_queue;
 	for (int i = 0; i < count_elems; i++)
 	{
@@ -125,16 +147,15 @@ void Algorithms::PrimsAlgorithm(const int& count_elems, const vector<vector<int>
 	out.close();
 }
 
-void Algorithms::DijkstraAlgorithm(const int& count_elems, const vector<vector<int>>& graph)
+void Algorithms::DijkstraAlgorithm()
 {
-	int x;
 	cout << "Dijkstra's algorithm, enter node number: ";
-	cin >> x;
+	cin >> start;
 
 	vector<int> distance(count_elems, INT_MAX);
 	int count, v;
 	vector<bool> visited(count_elems, 0);
-	distance[x - 1] = 0;
+	distance[start - 1] = 0;
 	for (int j = 0; j < count_elems - 1; j++)
 	{
 		int min = INT_MAX;
@@ -159,11 +180,11 @@ void Algorithms::DijkstraAlgorithm(const int& count_elems, const vector<vector<i
 	{
 		if (distance[i] != INT_MAX)
 		{
-			cout << x - 1 << " > " << i + 1 << " = " << distance[i] << endl;
+			cout << start - 1 << " > " << i + 1 << " = " << distance[i] << endl;
 		}
 		else
 		{
-			cout << x - 1 << " > " << i + 1 << " = " << "no path" << endl;
+			cout << start - 1 << " > " << i + 1 << " = " << "no path" << endl;
 		}
 	}
 	ofstream out("command.txt");
@@ -172,7 +193,7 @@ void Algorithms::DijkstraAlgorithm(const int& count_elems, const vector<vector<i
 	out.close();
 }
 
-int Algorithms::h(int current, const vector<vector<int>>& graph, unordered_map<int, int> came_from) {
+int Algorithms::h(int current, unordered_map<int, int> came_from) {
 	int h = 0;
 	for (auto node : came_from)
 	{
@@ -181,9 +202,7 @@ int Algorithms::h(int current, const vector<vector<int>>& graph, unordered_map<i
 	return h;
 }
 
-void Algorithms::AStarAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
-
-	int start, goal;
+void Algorithms::AStarAlgorithm() {
 	cout << "A-star algorithm, enter first node number: ";
 	cin >> start;
 	start--;
@@ -205,7 +224,7 @@ void Algorithms::AStarAlgorithm(const int& count_elems, const vector<vector<int>
 	{
 		f_score[i] = INT_MAX;
 	}
-	f_score[start] = h(start, graph, came_from);
+	f_score[start] = h(start, came_from);
 
 	int current = 0;
 	while (!open_set.empty()) {
@@ -228,7 +247,7 @@ void Algorithms::AStarAlgorithm(const int& count_elems, const vector<vector<int>
 				if (tentative_g_score < g_score[i]) {
 					came_from[i] = current;
 					g_score[i] = tentative_g_score;
-					f_score[i] = tentative_g_score + h(i, graph, came_from);
+					f_score[i] = tentative_g_score + h(i, came_from);
 					if (!open_set.count(i))
 					{
 						open_set.insert(i);
@@ -250,7 +269,7 @@ void Algorithms::AStarAlgorithm(const int& count_elems, const vector<vector<int>
 	cout << endl;
 }
 
-vector<int> Algorithms::AStarAlgorithmVector(const int& count_elems, const vector<vector<int>>& graph, int start, int goal) {
+vector<int> Algorithms::AStarAlgorithmVector() {
 	unordered_set<int> open_set;
 	open_set.insert(start);
 	unordered_map<int, int> came_from;
@@ -265,7 +284,7 @@ vector<int> Algorithms::AStarAlgorithmVector(const int& count_elems, const vecto
 	{
 		f_score[i] = INT_MAX;
 	}
-	f_score[start] = h(start, graph, came_from);
+	f_score[start] = h(start, came_from);
 
 	int current = 0;
 	while (!open_set.empty()) {
@@ -288,7 +307,7 @@ vector<int> Algorithms::AStarAlgorithmVector(const int& count_elems, const vecto
 				if (tentative_g_score < g_score[i]) {
 					came_from[i] = current;
 					g_score[i] = tentative_g_score;
-					f_score[i] = tentative_g_score + h(i, graph, came_from);
+					f_score[i] = tentative_g_score + h(i, came_from);
 					if (!open_set.count(i))
 					{
 						open_set.insert(i);
@@ -306,9 +325,8 @@ vector<int> Algorithms::AStarAlgorithmVector(const int& count_elems, const vecto
 	return total_path;
 }
 
-void Algorithms::FordFulkersonAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
+void Algorithms::FordFulkersonAlgorithm() {
 	int pathCount = 0;
-	int start, goal;
 	cout << "Ford-Fulkerson algorithm, enter first node number: ";
 	cin >> start;
 	start--;
@@ -322,7 +340,7 @@ void Algorithms::FordFulkersonAlgorithm(const int& count_elems, const vector<vec
 	vector<int> visited;
 	map<int, int> parent;
 	while (true) {
-		visited = AStarAlgorithmVector(count_elems, graph, start, goal);
+		visited = AStarAlgorithmVector();
 		for (int i = 0; i < visited.size() - 1; i++)
 		{
 			parent[visited[i + 1]] = visited[i];
@@ -364,11 +382,9 @@ void Algorithms::FordFulkersonAlgorithm(const int& count_elems, const vector<vec
 	cout << max_flow << endl;
 }
 
-void Algorithms::DijkstraBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
-	int start;
+void Algorithms::DijkstraBidirectionalAlgorithm() {
 	cout << "Bidirectional Dijkstra's algorithm, enter first node number: ";
 	cin >> start;
-	int goal;
 	cout << "Enter last node number: ";
 	cin >> goal;
 	start--;
@@ -458,9 +474,7 @@ void Algorithms::DijkstraBidirectionalAlgorithm(const int& count_elems, const ve
 	}
 }
 
-void Algorithms::AStarBidirectionalAlgorithm(const int& count_elems, const vector<vector<int>>& graph) {
-
-	int start, goal;
+void Algorithms::AStarBidirectionalAlgorithm() {
 	cout << "Bidirectional A-star algorithm, enter first node number: ";
 	cin >> start;
 	start--;
@@ -497,8 +511,8 @@ void Algorithms::AStarBidirectionalAlgorithm(const int& count_elems, const vecto
 	{
 		f_score_goal[i] = INT_MAX;
 	}
-	f_score_start[start] = h(start, graph, came_from_start);
-	f_score_goal[goal] = h(goal, graph, came_from_goal);
+	f_score_start[start] = h(start, came_from_start);
+	f_score_goal[goal] = h(goal, came_from_goal);
 
 	int current_start = 0;
 	int current_goal = 0;
@@ -575,7 +589,7 @@ void Algorithms::AStarBidirectionalAlgorithm(const int& count_elems, const vecto
 				if (tentative_g_score < g_score_start[i]) {
 					came_from_start[i] = current_start;
 					g_score_start[i] = tentative_g_score;
-					f_score_start[i] = tentative_g_score + h(i, graph, came_from_start);
+					f_score_start[i] = tentative_g_score + h(i, came_from_start);
 					if (!open_set_start.count(i))
 					{
 						open_set_start.insert(i);
@@ -591,7 +605,7 @@ void Algorithms::AStarBidirectionalAlgorithm(const int& count_elems, const vecto
 				if (tentative_g_score < g_score_goal[i]) {
 					came_from_goal[i] = current_goal;
 					g_score_goal[i] = tentative_g_score;
-					f_score_goal[i] = tentative_g_score + h(i, graph, came_from_goal);
+					f_score_goal[i] = tentative_g_score + h(i, came_from_goal);
 					if (!open_set_goal.count(i))
 					{
 						open_set_goal.insert(i);
