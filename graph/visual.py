@@ -1,3 +1,4 @@
+from matplotlib import font_manager
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
@@ -35,8 +36,10 @@ def PrintMatrix():
     def animate(i):
         plt.clf()
         plt.cla()
+        colors = nx.get_edge_attributes(G,'color').values()
+        weights = nx.get_edge_attributes(G,'weight').values()
         if x == 1:
-            nx.draw(G,pos=pos,node_color="red")
+            nx.draw(G, pos, edge_color=colors, node_color = color_map, width=list(weights),  labels=labeldict, with_labels=True, font_color='white')
         elif x == 2:
             nx.draw(G,pos=pos,node_color="green")
         elif x == 3:
@@ -56,7 +59,6 @@ def ReadFile(name):
         f = open(name, 'r')
         str = f.readline()
         if str == "new\n":
-            print('!')
             f.close()
             PaintGraph(name)
         f.close()
@@ -69,9 +71,17 @@ def PaintGraph(name):
     str = f.readline()
     if str == "new\n":       
         str = f.readline()
-        print(str)
+        lst = f.readline()
+        lst = list(map(int, lst.split()))
         if  str == "DepthFirstSearch\n":       
             x = 1
+            i = 0
+            while i < len(lst)-1:
+                G.add_edge(lst[i],lst[i+1],color='r',weight=2)
+                for node in G:
+                    if node == lst[i] or node == lst[i+1]:
+                        color_map[node]='red' 
+                i += 1 
         elif str == "BreadthFirstSearch\n":   
             x = 2
         elif str == "PrimsAlgorithm\n":   
@@ -92,6 +102,15 @@ H = nx.path_graph(matrix.shape[0])
 G.add_nodes_from(H)
 G.add_weighted_edges_from(edges)
 colors = np.arange(matrix.shape[0])
+for e in G.edges():
+    G[e[0]][e[1]]['color'] = 'black'
+color_map = []
+labeldict = {}
+for node in G:
+    color_map.append('black')       
+    labeldict[node] = node+1
+ 
+
 
 x = 0
 s = "command.txt"
@@ -99,9 +118,4 @@ th_matrix = Thread(target=PrintMatrix, daemon=True)
 th_read = Thread(target=ReadFile, args=(s,))
 th_matrix.start()
 th_read.start()
-
-
-
-
-
 

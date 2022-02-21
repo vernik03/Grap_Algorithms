@@ -54,7 +54,7 @@ void Algorithms::DepthFirstSearch() {
 			}
 		}
 		cout << node + 1 << " ";
-		out << node + 1 << " ";
+		out << node << " ";
 	}
 	cout << endl;
 	out.close();
@@ -85,7 +85,7 @@ void Algorithms::BreadthFirstSearch() {
 			}
 		}
 		cout << node + 1 << " ";
-		out << node + 1 << " ";
+		out << node << " ";
 	}
 	cout << endl;
 	out.close();
@@ -265,8 +265,14 @@ void Algorithms::AStarAlgorithm() {
 	for (auto elem : total_path) {
 		std::cout << elem + 1 << " ";
 	}
-	std::cout << std::endl;
 	cout << endl;
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << "DepthFirstSearch" << endl;
+	for (auto elem : total_path) {
+		out << elem  << " ";
+	}
+	out.close();
 }
 
 vector<int> Algorithms::AStarAlgorithmVector() {
