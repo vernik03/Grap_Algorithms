@@ -53,6 +53,7 @@ void Algorithms::DepthFirstSearchAlgorithm() {
 		}
 		cout << node + 1 << " ";
 		out << node << " ";
+
 	}
 	out.close();
 }
