@@ -11,19 +11,19 @@ int main()
 
 	thread t1([&]()
 		{
-			//graph.DepthFirstSearch();
-			//graph.BreadthFirstSearch();
-			//graph.PrimsAlgorithm();
+			graph.DepthFirstSearch();
+			graph.BreadthFirstSearch();
+			graph.PrimsAlgorithm();
 			graph.DijkstraAlgorithm();
 			graph.AStarAlgorithm();
-			//graph.FordFulkersonAlgorithm();
+			graph.FordFulkersonAlgorithm();
 			graph.DijkstraBidirectionalAlgorithm();
 			graph.AStarBidirectionalAlgorithm();
 		});
 
 	thread t2([&]()
 		{
-			system("python visual.py");
+			//system("python visual.py");
 		});
 
 	t1.join();

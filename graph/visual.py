@@ -78,7 +78,7 @@ def PaintGraph(name):
             i = 0
             while i < len(lst)-1:
                 G.add_edge(lst[i],lst[i+1],color='r',weight=2)
-                for node in G:
+                for node in G:                    
                     if node == lst[i] or node == lst[i+1]:
                         color_map[node]='red' 
                 i += 1 
@@ -91,7 +91,6 @@ def PaintGraph(name):
         f.close()
         fw = open(name, 'w')
         fw.write('painted')
-
 
 
 

@@ -28,17 +28,15 @@ Algorithms::Algorithms(const string& filename) {
 	}
 };
 
-void Algorithms::DepthFirstSearch() {
-	cout << "Depth-first search, enter node number: ";
-	cin >> start;
-
+void Algorithms::DepthFirstSearchAlgorithm() {
+	
 	ofstream out("command.txt");
 	out << "new" << endl;
 	out << "DepthFirstSearch" << endl;
 
 	vector<int> nodes(count_elems, 0);
 	stack<int> my_stack;
-	my_stack.push(start - 1);
+	my_stack.push(start);
 	while (!my_stack.empty())
 	{
 		int node = my_stack.top();
@@ -56,11 +54,10 @@ void Algorithms::DepthFirstSearch() {
 		cout << node + 1 << " ";
 		out << node << " ";
 	}
-	cout << endl;
 	out.close();
 }
 
-void Algorithms::BreadthFirstSearch() {
+void Algorithms::BreadthFirstSearchAlgorithm() {
 	cout << "Breadth-first search, enter node number: ";
 	cin >> start;
 
@@ -399,26 +396,37 @@ void Algorithms::DijkstraBidirectionalAlgorithm() {
 	vector<int> distance_start(count_elems, INT_MAX);
 	int count_start, v_start;
 	vector<bool> visited_start(count_elems, 0);
-	distance_start[start] = start;
+	distance_start[start] = 0;
 	vector<int> parents_start(count_elems, 0);
 	parents_start[start] = start;
 
 	vector<int> distance_goal(count_elems, INT_MAX);
 	int count_goal, v_goal;
 	vector<bool> visited_goal(count_elems, 0);
-	distance_goal[goal] = goal;
+	distance_goal[goal] = 0;
 	vector<int> parents_goal(count_elems, 0);
 	parents_goal[goal] = goal;
 
 	for (int j = 0; j < count_elems - 1; j++)
 	{
 		int min = INT_MAX;
+		v_start = count_elems;
 		for (int i = 0; i < count_elems; i++)
 		{
 			if (!visited_start[i] && distance_start[i] <= min)
 			{
-				min = distance_start[i];
-				v_start = i;
+				if ((v_start != count_elems)) {
+					if ((visited_goal[v_start] && (!visited_goal[i]))) {
+						//std::cout << "new min" << i << std::endl;
+						min = distance_start[i];
+						v_start = i;
+					}
+				}
+				else {
+					//std::cout << "new min" << i << std::endl;
+					min = distance_start[i];
+					v_start = i;
+				}
 			}
 		}
 		visited_start[v_start] = true;
@@ -449,6 +457,8 @@ void Algorithms::DijkstraBidirectionalAlgorithm() {
 				distance_goal[i] = distance_goal[v_goal] + graph[v_goal][i];
 			}
 		}
+
+		//std::cout << v_start + 1 << " " << v_goal + 1 << std::endl;
 
 		bool leave = false;
 		for (int i = 0; i < visited_start.size() - 1; i++) {
