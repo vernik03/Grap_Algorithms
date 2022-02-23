@@ -13,12 +13,12 @@ int main()
 		{
 			graph.DepthFirstSearch();
 			graph.BreadthFirstSearch();
-			graph.PrimsAlgorithm();
-			graph.DijkstraAlgorithm();
-			graph.AStarAlgorithm();
-			graph.FordFulkersonAlgorithm();
-			graph.DijkstraBidirectionalAlgorithm();
-			graph.AStarBidirectionalAlgorithm();
+			graph.Prims();
+			graph.Dijkstra();
+			graph.AStar();
+			graph.FordFulkerson();
+			graph.DijkstraBidirectional();
+			graph.AStarBidirectional();
 		});
 
 	thread t2([&]()

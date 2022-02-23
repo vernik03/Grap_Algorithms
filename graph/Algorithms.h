@@ -27,17 +27,17 @@ public:
 		DepthFirstSearchAlgorithm();
 		cout << start + 1 << " ";
 		for (auto elem : result) {
-			cout << elem.second + 1 << " ";
+			cout << elem.first + 1<<"-"<<elem.second + 1 << " ";
 		}
 		cout << endl;
 	}
-	void BreadthFirstSearch();
-	void Prims();
-	void Dijkstram();
-	void AStar();
-	void FordFulkerson();
-	void DijkstraBidirectional();
-	void AStarBidirectional();
+	void BreadthFirstSearch() {}
+	void Prims() {}
+	void Dijkstra() {}
+	void AStar() {}
+	void FordFulkerson() {}
+	void DijkstraBidirectional() {}
+	void AStarBidirectional() {}
 
 	void DepthFirstSearchAlgorithm();
 	void BreadthFirstSearchAlgorithm();

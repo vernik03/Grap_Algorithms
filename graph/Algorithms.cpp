@@ -30,10 +30,6 @@ Algorithms::Algorithms(const string& filename) {
 
 void Algorithms::DepthFirstSearchAlgorithm() {
 	
-	ofstream out("command.txt");
-	out << "new" << endl;
-	out << "DepthFirstSearch" << endl;
-
 	vector<int> nodes(count_elems, 0);
 	stack<int> my_stack;
 	my_stack.push(start);
@@ -47,24 +43,21 @@ void Algorithms::DepthFirstSearchAlgorithm() {
 		{
 			if (graph[node][j] && nodes[j] != 2)
 			{
+				
 				my_stack.push(j);
 				nodes[j] = 1;
 			}
 		}
 		cout << node + 1 << " ";
-		out << node << " ";
 
 	}
-	out.close();
 }
 
 void Algorithms::BreadthFirstSearchAlgorithm() {
 	cout << "Breadth-first search, enter node number: ";
 	cin >> start;
 
-	ofstream out("command.txt");
-	out << "new" << endl;
-	out << "BreadthFirstSearch" << endl;
+	
 
 	vector<int> nodes(count_elems, 0);
 	queue<int> my_queue;
@@ -83,10 +76,8 @@ void Algorithms::BreadthFirstSearchAlgorithm() {
 			}
 		}
 		cout << node + 1 << " ";
-		out << node << " ";
 	}
 	cout << endl;
-	out.close();
 }
 
 void Algorithms::PrimsAlgorithm() {
