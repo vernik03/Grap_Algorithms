@@ -45,7 +45,15 @@ def PrintMatrix():
         elif x == 3:
             nx.draw(G,pos=pos,node_color="blue")
         elif x == 4:
-            nx.draw(G,pos=pos,node_color="yellow")  
+            nx.draw(G,pos=pos,node_color="blue")
+        elif x == 5:
+            nx.draw(G, pos, edge_color=colors, node_color = color_map, width=list(weights),  labels=labeldict, with_labels=True, font_color='white')
+        elif x == 6:
+            nx.draw(G,pos=pos,node_color="blue")
+        elif x == 7:
+            nx.draw(G,pos=pos,node_color="blue")
+        elif x == 8:
+            nx.draw(G,pos=pos,node_color="blue")
         else:
             nx.draw(G,pos=pos,node_color="black")  
 
@@ -81,13 +89,28 @@ def PaintGraph(name):
                 for node in G:                    
                     if node == lst[i] or node == lst[i+1]:
                         color_map[node]='red' 
-                i += 1 
+                i += 2 
         elif str == "BreadthFirstSearch\n":   
             x = 2
-        elif str == "PrimsAlgorithm\n":   
+        elif str == "Prims\n":   
             x = 3
-        elif str == "DijkstraAlgorithm\n":   
+        elif str == "Dijkstra\n":   
             x = 4
+        elif str == "AStar\n":   
+            x = 5
+            i = 0
+            while i < len(lst)-1:
+                G.add_edge(lst[i],lst[i+1],color='r',weight=2)
+                for node in G:                    
+                    if node == lst[i] or node == lst[i+1]:
+                        color_map[node]='red' 
+                i += 1 
+        elif str == "FordFulkerston\n":   
+            x = 6
+        elif str == "DijkstraBidirectional\n":   
+            x = 7
+        elif str == "AStarBidirectional\n":   
+            x = 8
         f.close()
         fw = open(name, 'w')
         fw.write('painted')

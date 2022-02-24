@@ -23,7 +23,7 @@ int main()
 
 	thread t2([&]()
 		{
-			//system("python visual.py");
+			system("python visual.py");
 		});
 
 	t1.join();

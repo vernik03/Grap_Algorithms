@@ -20,16 +20,11 @@ public:
 	Algorithms(const string& filename = "matrix.txt");
 	~Algorithms() {};
 	void DepthFirstSearch() {
-		cout << "Depth-first search, enter node number: ";
-		cin >> start;
-		start--;
+		ConsoleInput(1, "Depth-first search");
 		result.clear();
 		DepthFirstSearchAlgorithm();
-		cout << start + 1 << " ";
-		for (auto elem : result) {
-			cout << elem.first + 1<<"-"<<elem.second + 1 << " ";
-		}
-		cout << endl;
+		FileOutput("DepthFirstSearch");
+		ConsoleOutput();
 	}
 	void BreadthFirstSearch() {}
 	void Prims() {}
@@ -51,8 +46,44 @@ public:
 private:
 	int start, goal;
 	int count_elems;
-	multimap<int, int> result;
+	vector<pair<int, int>> result;
 	vector<vector<int>> graph;
-	int h(int current, unordered_map<int, int> came_from);
 	vector<int> AStarAlgorithmVector();
+
+	int h(int current, unordered_map<int, int> came_from);
+	void ConsoleOutput() {
+
+		cout << start + 1 << " ";
+		for (auto elem : result) {
+			cout << elem.second + 1 << " ";
+		}
+		cout << endl;
+	}
+	void FileOutput(string name) {
+		ofstream out("command.txt");
+		out << "new" << endl;
+		out << name << endl;		
+		for (auto elem : result) {
+			out << elem.first << " " << elem.second << " ";
+		}
+		out.close();
+	}
+	void ConsoleInput(int count, string name) {
+		if (count == 1)
+		{
+			cout << name << ", enter node number: ";
+			cin >> start;
+			start--;
+		}
+		else if (count == 2)
+		{
+			cout << name << ", enter first node number: ";
+			cin >> start;
+			start--;
+			cout << "Enter last node number: ";
+			cin >> goal;
+			goal--;			
+		}
+		
+	}
 };

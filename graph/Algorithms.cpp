@@ -29,30 +29,45 @@ Algorithms::Algorithms(const string& filename) {
 };
 
 void Algorithms::DepthFirstSearchAlgorithm() {
-	
+
 	vector<int> nodes(count_elems, 0);
 	stack<int> my_stack;
+	vector<bool> visited_nodes(count_elems, false);
+
+	vector<pair<int, int>> edges;
 	my_stack.push(start);
+	visited_nodes[start] = true;
+	int node = my_stack.top();
 	while (!my_stack.empty())
 	{
-		int node = my_stack.top();
-		my_stack.pop();
-		if (nodes[node] == 2) continue;
-		nodes[node] = 2;
-		for (int j = count_elems - 1; j >= 0; j--)
+		bool find_next = false;
+		for (int j = 0; j < count_elems; j++)
 		{
-			if (graph[node][j] && nodes[j] != 2)
+
+			if (graph[node][j] & !visited_nodes[j])
 			{
 				
+				find_next = true;
 				my_stack.push(j);
-				nodes[j] = 1;
+				result.push_back(make_pair(node, j));
+				visited_nodes[j] = true;
+				node = j;
+				break;
 			}
+
 		}
-		cout << node + 1 << " ";
+		if (!find_next)
+		{
+
+			my_stack.pop();
+			if (my_stack.empty()) {
+				break;
+			}
+			node = my_stack.top();
+		}
 
 	}
 }
-
 void Algorithms::BreadthFirstSearchAlgorithm() {
 	cout << "Breadth-first search, enter node number: ";
 	cin >> start;
@@ -176,11 +191,8 @@ void Algorithms::DijkstraAlgorithm()
 			cout << start - 1 << " > " << i + 1 << " = " << "no path" << endl;
 		}
 	}
-	ofstream out("command.txt");
-	out << "new" << endl;
-	out << "DijkstraAlgorithm" << endl;
-	out.close();
 }
+	
 
 int Algorithms::h(int current, unordered_map<int, int> came_from) {
 	int h = 0;
