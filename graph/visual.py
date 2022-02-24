@@ -6,6 +6,8 @@ import scipy.sparse as sp
 import time
 from threading import Thread
 import matplotlib.animation as animation
+import warnings
+warnings.filterwarnings("ignore")
 
 
 
