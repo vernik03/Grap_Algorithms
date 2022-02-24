@@ -40,24 +40,7 @@ def PrintMatrix():
         plt.cla()
         colors = nx.get_edge_attributes(G,'color').values()
         weights = nx.get_edge_attributes(G,'weight').values()
-        if x == 1:
-            nx.draw(G, pos, edge_color=colors, node_color = color_map, width=list(weights),  labels=labeldict, with_labels=True, font_color='white')
-        elif x == 2:
-            nx.draw(G,pos=pos,node_color="green")
-        elif x == 3:
-            nx.draw(G,pos=pos,node_color="blue")
-        elif x == 4:
-            nx.draw(G,pos=pos,node_color="blue")
-        elif x == 5:
-            nx.draw(G, pos, edge_color=colors, node_color = color_map, width=list(weights),  labels=labeldict, with_labels=True, font_color='white')
-        elif x == 6:
-            nx.draw(G,pos=pos,node_color="blue")
-        elif x == 7:
-            nx.draw(G,pos=pos,node_color="blue")
-        elif x == 8:
-            nx.draw(G,pos=pos,node_color="blue")
-        else:
-            nx.draw(G,pos=pos,node_color="black")  
+        nx.draw(G, pos, edge_color=colors, node_color = color_map, width=list(weights),  labels=labeldict, with_labels=True, font_color='white')
 
     ani = animation.FuncAnimation(fig, animate, interval=1000)
     plt.show()
@@ -75,6 +58,14 @@ def ReadFile(name):
         time.sleep(1)
 
 
+def Repaint():
+    color_map.clear()
+    for node in G:
+        color_map.append('black')   
+    for e in G.edges():
+        G[e[0]][e[1]]['color'] = 'black'
+
+
 def PaintGraph(name): 
     global x
     f = open(name, 'r')    
@@ -83,36 +74,18 @@ def PaintGraph(name):
         str = f.readline()
         lst = f.readline()
         lst = list(map(int, lst.split()))
-        if  str == "DepthFirstSearch\n":       
-            x = 1
+        if str == "Dijkstra\n": 
+            Repaint() 
+        else :  
+            Repaint()
             i = 0
             while i < len(lst)-1:
-                G.add_edge(lst[i],lst[i+1],color='r',weight=2)
+                G[lst[i]][lst[i+1]]['color'] = 'red'
+                G[lst[i]][lst[i+1]]['weight'] = 2
                 for node in G:                    
                     if node == lst[i] or node == lst[i+1]:
                         color_map[node]='red' 
                 i += 2 
-        elif str == "BreadthFirstSearch\n":   
-            x = 2
-        elif str == "Prims\n":   
-            x = 3
-        elif str == "Dijkstra\n":   
-            x = 4
-        elif str == "AStar\n":   
-            x = 5
-            i = 0
-            while i < len(lst)-1:
-                G.add_edge(lst[i],lst[i+1],color='r',weight=2)
-                for node in G:                    
-                    if node == lst[i] or node == lst[i+1]:
-                        color_map[node]='red' 
-                i += 1 
-        elif str == "FordFulkerston\n":   
-            x = 6
-        elif str == "DijkstraBidirectional\n":   
-            x = 7
-        elif str == "AStarBidirectional\n":   
-            x = 8
         f.close()
         fw = open(name, 'w')
         fw.write('painted')

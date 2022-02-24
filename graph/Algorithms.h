@@ -26,20 +26,62 @@ public:
 		FileOutput("DepthFirstSearch");
 		ConsoleOutput();
 	}
-	void BreadthFirstSearch() {}
-	void Prims() {}
-	void Dijkstra() {}
-	void AStar() {}
-	void FordFulkerson() {}
-	void DijkstraBidirectional() {}
-	void AStarBidirectional() {}
+	void BreadthFirstSearch() {
+		ConsoleInput(1, "Breadth-first search");
+		result.clear();
+		BreadthFirstSearchAlgorithm();
+		FileOutput("BreadthFirstSearch");
+		ConsoleOutput();
+	}
+	void Prims() {
+		ConsoleInput(1, "Prim's algorithm");
+		result.clear();
+		PrimsAlgorithm();
+		FileOutput("Prims");
+		ConsoleOutput("pairs");
+	}
+	void Dijkstra() {
+		ConsoleInput(1, "Dijkstra algorithm");
+		result.clear();
+		DijkstraAlgorithm();
+		FileOutput("Dijkstra");
+		ConsoleOutput("distance");
+	}
+	void AStar() {
+		ConsoleInput(2, "A* algorithm");
+		result.clear();
+		AStarAlgorithm();
+		FileOutput("AStar");
+		ConsoleOutput();
+	}
+
+	void FordFulkerson() {
+		ConsoleInput(2, "Ford-Fulkerson algorithm");
+		result.clear();
+		cout << "Max flow: " << FordFulkersonAlgorithm() << "\n\n";
+		FileOutput("FordFulkerson");
+	}
+	void DijkstraBidirectional() {
+		ConsoleInput(2, "Dijkstra bidirectional algorithm");
+		result.clear();
+		DijkstraBidirectionalAlgorithm();
+		//FileOutput("DijkstraBidirectional");
+		//ConsoleOutput();
+	}
+	void AStarBidirectional() {
+		ConsoleInput(2, "A* bidirectional algorithm");
+		result.clear();
+		AStarBidirectionalAlgorithm();
+		//FileOutput("AStarBidirectional");
+		//ConsoleOutput();
+	}
 
 	void DepthFirstSearchAlgorithm();
 	void BreadthFirstSearchAlgorithm();
 	void PrimsAlgorithm();
 	void DijkstraAlgorithm();
-	void AStarAlgorithm();
-	void FordFulkersonAlgorithm();
+	vector<int> AStarAlgorithm(string param = "no_param");
+	int FordFulkersonAlgorithm();
 	void DijkstraBidirectionalAlgorithm();
 	void AStarBidirectionalAlgorithm();
 
@@ -51,13 +93,29 @@ private:
 	vector<int> AStarAlgorithmVector();
 
 	int h(int current, unordered_map<int, int> came_from);
-	void ConsoleOutput() {
-
-		cout << start + 1 << " ";
-		for (auto elem : result) {
-			cout << elem.second + 1 << " ";
+	void ConsoleOutput(string type = "path") {
+		if (type == "path")
+		{
+			cout << start + 1 << " ";
+			for (auto elem : result) {
+				cout << elem.second + 1 << " ";
+			}
+			cout << "\n\n";
 		}
-		cout << endl;
+		else if (type == "pairs")
+		{
+			for (auto elem : result) {
+				cout << elem.first + 1 << "-" << elem.second + 1 << " ";
+			}
+			cout << "\n\n";
+		}
+		else if (type == "distance")
+		{
+			for (auto elem : result) {
+				cout << start + 1 << " -> " << elem.first + 1 << " = " << elem.second + 1 << endl;
+			}
+			cout << endl;
+		}
 	}
 	void FileOutput(string name) {
 		ofstream out("command.txt");

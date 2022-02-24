@@ -11,11 +11,11 @@ int main()
 
 	thread t1([&]()
 		{
-			graph.DepthFirstSearch();
-			graph.BreadthFirstSearch();
-			graph.Prims();
-			graph.Dijkstra();
-			graph.AStar();
+			//graph.DepthFirstSearch();
+			//graph.BreadthFirstSearch();
+			//graph.Prims();
+			//graph.Dijkstra();
+			//graph.AStar();
 			graph.FordFulkerson();
 			graph.DijkstraBidirectional();
 			graph.AStarBidirectional();
