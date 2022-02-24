@@ -11,14 +11,22 @@ int main()
 
 	thread t1([&]()
 		{
-			//graph.DepthFirstSearch();
-			//graph.BreadthFirstSearch();
-			//graph.Prims();
-			//graph.Dijkstra();
-			//graph.AStar();
-			graph.FordFulkerson();
-			graph.DijkstraBidirectional();
-			graph.AStarBidirectional();
+			bool flag = true;
+			while (flag)
+			{
+				graph.DepthFirstSearch();
+				graph.BreadthFirstSearch();
+				graph.Prims();
+				graph.Dijkstra();
+				graph.AStar();
+				graph.FordFulkerson();
+				graph.DijkstraBidirectional();
+				graph.AStarBidirectional();
+				cout << "Again? ";
+				cin >> flag;
+				cout << endl;
+			}
+			return 0;
 		});
 
 	thread t2([&]()

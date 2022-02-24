@@ -65,15 +65,15 @@ public:
 		ConsoleInput(2, "Dijkstra bidirectional algorithm");
 		result.clear();
 		DijkstraBidirectionalAlgorithm();
-		//FileOutput("DijkstraBidirectional");
-		//ConsoleOutput();
+		FileOutput("DijkstraBidirectional");
+		ConsoleOutput();
 	}
 	void AStarBidirectional() {
 		ConsoleInput(2, "A* bidirectional algorithm");
 		result.clear();
 		AStarBidirectionalAlgorithm();
-		//FileOutput("AStarBidirectional");
-		//ConsoleOutput();
+		FileOutput("AStarBidirectional");
+		ConsoleOutput();
 	}
 
 	void DepthFirstSearchAlgorithm();

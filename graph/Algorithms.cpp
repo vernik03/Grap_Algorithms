@@ -311,6 +311,8 @@ void Algorithms::DijkstraBidirectionalAlgorithm() {
 	vector<int> parents_goal(count_elems, 0);
 	parents_goal[goal] = goal;
 
+	vector<int> result_path;
+
 	for (int j = 0; j < count_elems - 1; j++)
 	{
 		int min = INT_MAX;
@@ -371,26 +373,27 @@ void Algorithms::DijkstraBidirectionalAlgorithm() {
 				leave = true;
 
 				int curr = i;
-				std::cout << curr + 1 << " ";
+				result_path.push_back(curr);
 				while (curr != parents_start[curr]) {
 					curr = parents_start[curr];
-					std::cout << curr + 1 << " ";
+					result_path.push_back(curr);
 				}
-				std::cout << "\n";
-
+				reverse(result_path.begin(), result_path.end());
 				curr = i;
-				std::cout << curr + 1 << " ";
 				while (curr != parents_goal[curr]) {
 					curr = parents_goal[curr];
-					std::cout << curr + 1 << " ";
+					result_path.push_back(curr);
 				}
-				std::cout << "\n";
 				break;
 			}
 		}
 		if (leave) {
 			break;
 		}
+	}
+	for (int i = 0; i < result_path.size()-1; i++)
+	{
+		result.push_back(make_pair(result_path[i], result_path[i + 1]));
 	}
 }
 
@@ -527,8 +530,6 @@ void Algorithms::AStarBidirectionalAlgorithm() {
 			}
 		}
 	}
-
-
 	std::vector<int> total_path_start = { current_start };
 	while (current_start != start) {
 		current_start = came_from_start[current_start];
@@ -555,11 +556,8 @@ void Algorithms::AStarBidirectionalAlgorithm() {
 	{
 		total_path_start.push_back(total_path_goal[i]);
 	}
-
-
-	for (auto elem : total_path_start) {
-		std::cout << elem + 1 << " ";
+	for (int i = 0; i < total_path_start.size() - 1; i++)
+	{
+		result.push_back(make_pair(total_path_start[i], total_path_start[i + 1]));
 	}
-	std::cout << std::endl;
-	cout << endl;
 }
