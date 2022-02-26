@@ -7,9 +7,8 @@ import time
 from threading import Thread
 import matplotlib.animation as animation
 import warnings
+import sys
 warnings.filterwarnings("ignore")
-
-
 
 def get_matrix_triad(coo_matrix , data=False):
 	'''
@@ -44,7 +43,15 @@ def PrintMatrix():
 
     ani = animation.FuncAnimation(fig, animate, interval=1000)
     plt.show()
-    
+
+def Repaint():
+    color_map.clear()
+    for node in G:
+        color_map.append('black')   
+    for e in G.edges():
+        G[e[0]][e[1]]['color'] = 'black'
+        G[e[0]][e[1]]['weight'] = 1
+ 
 
 def ReadFile(name):     
     global x
@@ -54,19 +61,17 @@ def ReadFile(name):
         if str == "new\n":
             f.close()
             PaintGraph(name)
+        elif str == "end\n":
+            f.close()
+            sys.exit()
+        elif str == "clear\n":
+            f.close()
+            Repaint()
         f.close()
         time.sleep(1)
 
 
-def Repaint():
-    color_map.clear()
-    for node in G:
-        color_map.append('black')   
-    for e in G.edges():
-        G[e[0]][e[1]]['color'] = 'black'
-
-
-def PaintGraph(name): 
+def PaintGraph(name):  
     global x
     f = open(name, 'r')    
     str = f.readline()
@@ -90,8 +95,6 @@ def PaintGraph(name):
         fw = open(name, 'w')
         fw.write('painted')
 
-
-
 matrix = np.genfromtxt("matrix.txt", delimiter=' ')
 edges = get_matrix_triad(matrix)
 G = nx.Graph()
@@ -106,8 +109,6 @@ labeldict = {}
 for node in G:
     color_map.append('black')       
     labeldict[node] = node+1
- 
-
 
 x = 0
 s = "command.txt"
@@ -115,4 +116,3 @@ th_matrix = Thread(target=PrintMatrix, daemon=True)
 th_read = Thread(target=ReadFile, args=(s,))
 th_matrix.start()
 th_read.start()
-

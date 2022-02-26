@@ -561,3 +561,159 @@ void Algorithms::AStarBidirectionalAlgorithm() {
 		result.push_back(make_pair(total_path_start[i], total_path_start[i + 1]));
 	}
 }
+
+
+void Algorithms::DepthFirstSearch() {
+	do
+	{
+		ConsoleInput(1, "Depth-first search");
+		result.clear();
+		DepthFirstSearchAlgorithm();
+		FileOutput("DepthFirstSearch");
+		ConsoleOutput();
+	} while (OneMoreTime());
+}
+
+void Algorithms::BreadthFirstSearch() {
+	do {
+		ConsoleInput(1, "Breadth-first search");
+		result.clear();
+		BreadthFirstSearchAlgorithm();
+		FileOutput("BreadthFirstSearch");
+		ConsoleOutput();
+	} while (OneMoreTime());
+}
+
+void Algorithms::Prims() {
+	do
+	{
+		ConsoleInput(1, "Prim's algorithm");
+		result.clear();
+		PrimsAlgorithm();
+		FileOutput("Prims");
+		ConsoleOutput("pairs");
+	} while (OneMoreTime());
+}
+
+void Algorithms::Dijkstra() {
+	do
+	{
+		ConsoleInput(1, "Dijkstra algorithm");
+		result.clear();
+		DijkstraAlgorithm();
+		FileOutput("Dijkstra");
+		ConsoleOutput("distance");
+	} while (OneMoreTime());
+}
+
+void Algorithms::AStar() {
+	do
+	{
+		ConsoleInput(2, "A* algorithm");
+		result.clear();
+		AStarAlgorithm();
+		FileOutput("AStar");
+		ConsoleOutput();
+	} while (OneMoreTime());
+}
+
+void Algorithms::FordFulkerson() {
+	do
+	{
+		ConsoleInput(2, "Ford-Fulkerson algorithm");
+		result.clear();
+		cout << "Max flow: " << FordFulkersonAlgorithm() << "\n\n";
+		FileOutput("FordFulkerson");
+	} while (OneMoreTime());
+}
+
+void Algorithms::DijkstraBidirectional() {
+	do
+	{
+		ConsoleInput(2, "Dijkstra bidirectional algorithm");
+		result.clear();
+		DijkstraBidirectionalAlgorithm();
+		FileOutput("DijkstraBidirectional");
+		ConsoleOutput();
+	} while (OneMoreTime());
+}
+
+void Algorithms::AStarBidirectional() {
+	do
+	{
+		ConsoleInput(2, "A* bidirectional algorithm");
+		result.clear();
+		AStarBidirectionalAlgorithm();
+		FileOutput("AStarBidirectional");
+		ConsoleOutput();
+	} while (OneMoreTime());
+}
+
+
+void Algorithms::ConsoleOutput(string type) {
+	if (type == "path")
+	{
+		cout << start + 1 << " ";
+		for (auto elem : result) {
+			cout << elem.second + 1 << " ";
+		}
+		cout << endl;
+	}
+	else if (type == "pairs")
+	{
+		for (auto elem : result) {
+			cout << elem.first + 1 << "-" << elem.second + 1 << " ";
+		}
+		cout << endl;
+	}
+	else if (type == "distance")
+	{
+		for (auto elem : result) {
+			cout << start + 1 << " -> " << elem.first + 1 << " = " << elem.second + 1 << endl;
+		}
+	}
+}
+
+void Algorithms::FileOutput(string name) {
+	ofstream out("command.txt");
+	out << "new" << endl;
+	out << name << endl;
+	for (auto elem : result) {
+		out << elem.first << " " << elem.second << " ";
+	}
+	out.close();
+}
+
+void Algorithms::ConsoleInput(int count, string name) {
+	if (count == 1)
+	{
+		cout << name << ", enter node number: ";
+		cin >> start;
+		start--;
+	}
+	else if (count == 2)
+	{
+		cout << name << ", enter first node number: ";
+		cin >> start;
+		start--;
+		cout << "Enter last node number: ";
+		cin >> goal;
+		goal--;
+	}
+
+}
+
+bool Algorithms::OneMoreTime() {
+	char y_or_n;
+	cout << "One more time? (Y/N): ";
+	cin >> y_or_n;
+	if (y_or_n == 'y' || y_or_n == 'Y')
+	{
+		cout << endl;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
