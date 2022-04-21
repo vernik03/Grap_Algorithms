@@ -363,34 +363,30 @@ void Algorithms::DijkstraBidirectionalAlgorithm() {
 				distance_goal[i] = distance_goal[v_goal] + graph[v_goal][i];
 			}
 		}
-
-		//std::cout << v_start + 1 << " " << v_goal + 1 << std::endl;
-
-		bool leave = false;
-		for (int i = 0; i < visited_start.size() - 1; i++) {
-			if (visited_start[i] && visited_goal[i]) {
-				std::cout << "Connecting node: " << i + 1 << "\n";
-				leave = true;
-
-				int curr = i;
-				result_path.push_back(curr);
-				while (curr != parents_start[curr]) {
-					curr = parents_start[curr];
-					result_path.push_back(curr);
-				}
-				reverse(result_path.begin(), result_path.end());
-				curr = i;
-				while (curr != parents_goal[curr]) {
-					curr = parents_goal[curr];
-					result_path.push_back(curr);
-				}
-				break;
-			}
-		}
-		if (leave) {
-			break;
-		}
 	}
+
+	int curr = start;
+	result_path.push_back(curr);
+	while (curr != parents_start[curr]) {
+		curr = parents_start[curr];
+		result_path.push_back(curr);
+	}
+	vector<int> result_path_2;
+	curr = goal;
+	while (curr != parents_start[curr]) {
+		curr = parents_start[curr];
+		result_path_2.push_back(curr);
+	}
+	reverse(result_path_2.begin(), result_path_2.end());
+	for (int i = 1; i < result_path_2.size(); i++)
+	{
+		result_path.push_back(result_path_2[i]);
+	}
+	if (result_path[result_path.size()-1]!= goal)
+	{
+		result_path.push_back(goal);
+	}	
+
 	for (int i = 0; i < result_path.size()-1; i++)
 	{
 		result.push_back(make_pair(result_path[i], result_path[i + 1]));
